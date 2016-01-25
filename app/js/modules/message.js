@@ -1,3 +1,3 @@
 'use strict';
 
-var messageModule = angular.module('MessageModule', ['ngRoute']);
+var messageModule = angular.module('MessageModule', ['ngRoute', 'ngResource']);

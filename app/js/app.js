@@ -1,5 +1,7 @@
 'use strict';
 
+// API host
 var host = 'http://twitter.local';
 
-angular.module("App", ["MessageModule", "UserModule"]);
+// Main module
+angular.module("AppModule", ['MessageModule', 'UserModule', 'SecurityModule']);
