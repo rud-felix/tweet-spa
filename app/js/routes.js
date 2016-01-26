@@ -18,9 +18,9 @@ messageModule.config(['$routeProvider', '$locationProvider',
                 controller: 'MessageController',
                 auth: true
             })
-            .otherwise({
-                redirectTo: '/login'
-            })
+            //.otherwise({
+            //    redirectTo: '/login'
+            //})
         ;
     }
 ]);
@@ -41,6 +41,16 @@ userModule.config(['$routeProvider', '$locationProvider',
             .when('/users/:id', {
                 templateUrl: '/app/templates/user/users.html',
                 controller: 'UserController',
+                auth: true
+            })
+            .when('/users/followers', {
+                templateUrl: '/app/templates/user/followers.html',
+                controller: 'UserController',
+                auth: true
+            })
+            .when('/profile', {
+                templateUrl: '/app/templates/user/profile.html',
+                controller: 'profileController',
                 auth: true
             })
         ;

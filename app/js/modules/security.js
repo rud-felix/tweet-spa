@@ -1,3 +1,3 @@
 'use strict';
 
-var securityModule = angular.module('SecurityModule', ['ngRoute', 'ngResource']);
+var securityModule = angular.module('securityModule', ['ngRoute', 'ngResource']);

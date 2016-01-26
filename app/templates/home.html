@@ -11,9 +11,13 @@
 
                 <div class="control-group" ng-controller="MessageController as msg">
                     <form ng-submit="msg.add()">
-                        <input ng-model="msg.text" type="text" class="form-control" placeholder="What's news?" id="text">
-                        <div class="text-center">
-                            <input class="btn btn-success btn-lg" type="submit" value="Tweet-нуть">
+                        <div class="col-md-10">
+                            <input ng-model="msg.text" type="text" class="form-control field-add-mgs" placeholder="What's news?" id="text">
+                        </div>
+                        <div class="col-md-2">
+                            <div class="text-center">
+                                <input class="btn btn-success btn-lg" type="submit" value="send">
+                            </div>
                         </div>
                     </form>
                 </div>

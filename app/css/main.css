@@ -1,10 +1,10 @@
 body {
-    background-color: #233140;
+    /*background-color: #233140;*/
 }
 
 #content {
     background-color: white;
-    min-height: 570px;
+    min-height: 595px;
 }
 
 .media-body p {
@@ -13,4 +13,16 @@ body {
 
 .page-title {
     margin: 20px 0px 20px;
+}
+
+.field-add-mgs {
+    height: 47px;
+}
+
+.btn-follow-unfollow {
+    width: 100px;
+}
+
+.row-user {
+    padding-top: 20px;
 }

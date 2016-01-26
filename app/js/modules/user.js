@@ -1,3 +1,3 @@
 'use strict';
 
-var userModule = angular.module('UserModule', ['ngRoute', 'ngResource']);
+var userModule = angular.module('userModule', ['ngRoute', 'ngResource']);

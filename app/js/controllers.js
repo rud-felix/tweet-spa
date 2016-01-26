@@ -1,10 +1,7 @@
 'use strict';
 
 // Message controller
-messageModule.controller('MessageController', [
-    '$scope',
-    '$location',
-    'MessagesFactory',
+messageModule.controller('MessageController', ['$scope', '$location', 'MessagesFactory',
     function ($scope, $location, MessagesFactory) {
         var self = this;
 
@@ -18,17 +15,69 @@ messageModule.controller('MessageController', [
             $scope.messages = MessagesFactory.addMessages.save(self.context, function () {
                 self.text = '';
             });
+
+            // TODO: view old + new messages
+            //$scope.messages = MessagesFactory.followersMessages.query();
+        };
+
+        self.search = function() {
+            self.context.text = self.text;
+
+            $scope.messages = MessagesFactory.searchMessages.query(self.context, function () {
+                self.text = '';
+            });
         };
 
         // TODO: refactoring
         if ($location.path() == '/') {
             $scope.title = 'Followers messages';
-            $scope.messages = MessagesFactory.userMessages.query(); // TODO: replace on followersMessages
+            $scope.messages = MessagesFactory.followersMessages.query();
         }
         if ($location.path() == '/search/message') {
             $scope.title = 'Search messages';
-            $scope.messages = MessagesFactory.searchMessages.query();
+            //$scope.messages = MessagesFactory.searchMessages.query();
         }
+        console.log($scope.messages);
+    }
+]);
+
+// User controller
+userModule.controller('UserController', ['$scope', '$location', 'UserFactory',
+    function ($scope, $location, UserFactory) {
+        var self = this;
+
+        self.followUser = function(id) {
+            UserFactory.follow.save({ userId: id });
+        };
+
+        self.unfollowUser = function(id) {
+            UserFactory.unfollow.save({ userId: id });
+        };
+
+        if ($location.path() == '/users/followers') {
+            $scope.title = 'User followers';
+            $scope.users = UserFactory.followers.query();
+        }
+        if ($location.path() == '/users') {
+            $scope.title = 'Users';
+            $scope.users = UserFactory.users.query();
+        }
+        if ($location.path() == '/profile') {
+            $scope.title = 'Profile';
+            $scope.users = UserFactory.profile.query();
+        }
+    }
+]);
+
+userModule.controller('profileController', ['$scope', '$location', 'UserFactory',
+    function ($scope, $location, UserFactory) {
+        var self = this;
+
+        $scope.email = localStorage.getItem('email');
+        $scope.username = localStorage.getItem('username');
+
+        $scope.title = 'Profile';
+        $scope.users = UserFactory.profile.query();
     }
 ]);
 
@@ -45,7 +94,7 @@ messageModule.factory('MessagesFactory', ['$resource', 'securityProvider',
                     },
                     isArray: false,
                     headers: { // TODO: move headers in some variable
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json',
                         'apikey': securityProvider.getToken()
                     }
                 }
@@ -58,7 +107,7 @@ messageModule.factory('MessagesFactory', ['$resource', 'securityProvider',
                     },
                     isArray: false,
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json',
                         'apikey': securityProvider.getToken()
                     }
                 }
@@ -72,7 +121,7 @@ messageModule.factory('MessagesFactory', ['$resource', 'securityProvider',
                     },
                     isArray: false,
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json',
                         'apikey': securityProvider.getToken()
                     }
                 }
@@ -83,75 +132,7 @@ messageModule.factory('MessagesFactory', ['$resource', 'securityProvider',
                     params: {},
                     isArray: false,
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'apikey': securityProvider.getToken()
-                    }
-                }
-            })
-        };
-    }]
-);
-
-// User controller
-userModule.controller('UserController', ['$scope', '$location', '$routeParams',
-    function ($scope, $location, $routeParams, Userfactory) {
-        $scope.title = 'User';
-
-    }
-]);
-
-// TODO: move factory in to services.js
-userModule.factory('UserFactory', ['$resource',
-    function ($resource) {
-        return {
-            users: $resource(host + '/api/v1/users/pages/:page', {}, {
-                query: {
-                    method: 'GET',
-                    params: {
-                        page: 1
-                    },
-                    isArray: false,
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'apikey': securityProvider.getToken()
-                    }
-                }
-            }),
-            followers: $resource(host + '/api/v1/users/followers/pages/:page', {}, {
-                query: {
-                    method: 'GET',
-                    params: {
-                        page: 1
-                    },
-                    isArray: false,
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'apikey': securityProvider.getToken()
-                    }
-                }
-            }),
-            follow: $resource(host + '/api/v1/users/:id/follow', {}, {
-                save: {
-                    method: 'POST',
-                    params: {
-                        id: 1
-                    },
-                    isArray: false,
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'apikey': securityProvider.getToken()
-                    }
-                }
-            }),
-            unfollow: $resource(host + '/api/v1/users/:id/unfollow', {}, {
-                save: {
-                    method: 'PUT',
-                    params: {
-                        id: 1
-                    },
-                    isArray: false,
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json',
                         'apikey': securityProvider.getToken()
                     }
                 }
@@ -175,8 +156,6 @@ securityModule.controller('SecurityController', [
             'email': null
         };
 
-
-
         /**
          * @param {string} token
          * @return {boolean}
@@ -186,16 +165,21 @@ securityModule.controller('SecurityController', [
             if (localStorage.setItem('token', token)) {
                 return true;
             }
-
             return false;
+        };
+
+        self.saveUserInfo = function (username, email) {
+            localStorage.setItem('username', username);
+            localStorage.setItem('email', email);
         };
 
         self.login = function () {
             self.credential.username = self.username;
             self.credential.password = self.password;
 
-            SecurityFactory.login.query(self.credential, function (response) {
+            SecurityFactory.request_login.query(self.credential, function (response) {
                 self.saveToken(response.apiKey);
+                self.saveUserInfo(response.username, response.email);
                 $location.path('/');
             });
         };
@@ -207,6 +191,7 @@ securityModule.controller('SecurityController', [
 
             SecurityFactory.registration.save(self.credential, function (response) {
                 self.saveToken(response.apiKey);
+                self.saveUserInfo(response.username, response.email);
                 $location.path('/');
             });
         };
@@ -216,11 +201,12 @@ securityModule.controller('SecurityController', [
          */
         self.logout = function () {
             if (localStorage.removeItem('token')) {
+                localStorage.removeItem('username');
+                localStorage.removeItem('email');
                 $location.path('/login');
                 return true;
             }
             return false;
-
         };
 
         /**
@@ -237,14 +223,89 @@ securityModule.controller('SecurityController', [
 ]);
 
 // TODO: move factory in to services.js
+userModule.factory('UserFactory', ['$resource', 'securityProvider',
+    function ($resource, securityProvider) {
+        return {
+            users: $resource(host + '/api/v1/users/pages/:page', {}, {
+                query: {
+                    method: 'GET',
+                    params: {
+                        page: 1
+                    },
+                    cache: false,
+                    isArray: false,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': securityProvider.getToken()
+                    }
+                }
+            }),
+            followers: $resource(host + '/api/v1/users/followers/pages/:page', {}, {
+                query: {
+                    method: 'GET',
+                    params: {
+                        page: 1
+                    },
+                    cache: false,
+                    isArray: false,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': securityProvider.getToken()
+                    }
+                }
+            }),
+            follow: $resource(host + '/api/v1/users/:userId/follow', {}, {
+                save: {
+                    method: 'POST',
+                    params: {
+                        userId: '@userId'
+                    },
+                    cache: false,
+                    isArray: false,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': securityProvider.getToken()
+                    }
+                }
+            }),
+            unfollow: $resource(host + '/api/v1/users/:userId/unfollow', {}, {
+                save: {
+                    method: 'POST',
+                    params: {
+                        userId: '@userId'
+                    },
+                    cache: false,
+                    isArray: false,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': securityProvider.getToken()
+                    }
+                }
+            }),
+            profile: $resource(host + '/api/v1/users/profile', {}, {
+                query: {
+                    method: 'GET',
+                    isArray: false,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': securityProvider.getToken()
+                    }
+                }
+            }),
+        };
+    }]
+);
+
+// TODO: move factory in to services.js
 securityModule.factory('SecurityFactory', ['$resource',
     function ($resource) {
         return {
-            login: $resource(host + '/api/v1/login', {}, {
+            request_login: $resource(host + '/api/v1/login', {}, {
                 query: {
                     method: 'POST',
                     params: {},
-                    isArray: false
+                    isArray: false,
+                    cache: false
                 }
             }),
             logout: $resource(host + '/api/v1/logout', {}, {
@@ -266,28 +327,16 @@ securityModule.factory('SecurityFactory', ['$resource',
 );
 
 securityModule.provider('securityProvider',
-    function() {
-        this.$get = function() {
+    function () {
+        this.$get = function () {
             return {
                 /**
                  * @return {null|string}
                  */
-                getToken: function() {
+                getToken: function () {
                     return localStorage.getItem('token');
                 }
             }
         }
     }
 );
-
-//securityModule.factory('AuthFilter', ['SecurityController',
-//    function ($location, securityController) {
-//        return function () {
-//            if (!securityController.isAuthed()) {
-//                $location.path('/login');
-//                return false;
-//            }
-//            return true;
-//        };
-//    }
-//]);
