@@ -1,17 +1,5 @@
 'use strict';
 
-//messageModule.factory('AuthFilter', ['SecurityController',
-//    function ($location, securityController) {
-//        return function () {
-//            if (!securityController.isAuthed()) {
-//                $location.path('/login');
-//                return false;
-//            }
-//            return true;
-//        };
-//    }
-//]);
-
 messageModule.config(['$routeProvider', '$locationProvider',
     function ($routeProvide, $locationProvider) {
         $locationProvider.html5Mode({
@@ -24,7 +12,6 @@ messageModule.config(['$routeProvider', '$locationProvider',
                 templateUrl: '/app/templates/home.html',
                 controller: 'MessageController',
                 auth: true
-                //resolve: { AuthFilter: AuthFilter }
             })
             .when('/search/message', {
                 templateUrl: '/app/templates/message/search.html',

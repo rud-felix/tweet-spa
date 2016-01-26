@@ -33,8 +33,8 @@ messageModule.controller('MessageController', [
 ]);
 
 // TODO: move factory in to services.js
-messageModule.factory('MessagesFactory', ['$resource',
-    function ($resource) {
+messageModule.factory('MessagesFactory', ['$resource', 'securityProvider',
+    function ($resource, securityProvider) {
         return {
             userMessages: $resource(host + '/api/v1/messages/users/:userId/pages/:page', {}, {
                 query: {
@@ -43,7 +43,11 @@ messageModule.factory('MessagesFactory', ['$resource',
                         userId: 1,
                         page: 1
                     },
-                    isArray: false
+                    isArray: false,
+                    headers: { // TODO: move headers in some variable
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'apikey': securityProvider.getToken()
+                    }
                 }
             }),
             followersMessages: $resource(host + '/api/v1/messages/followers/pages/:page', {}, {
@@ -52,7 +56,11 @@ messageModule.factory('MessagesFactory', ['$resource',
                     params: {
                         page: 1
                     },
-                    isArray: false
+                    isArray: false,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'apikey': securityProvider.getToken()
+                    }
                 }
             }),
             searchMessages: $resource(host + '/api/v1/messages/search/pages/:page/:text', {}, {
@@ -62,14 +70,22 @@ messageModule.factory('MessagesFactory', ['$resource',
                         page: 1,
                         text: 'test'
                     },
-                    isArray: false
+                    isArray: false,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'apikey': securityProvider.getToken()
+                    }
                 }
             }),
             addMessages: $resource(host + '/api/v1/messages', {}, {
                 save: {
                     method: 'POST',
                     params: {},
-                    isArray: false
+                    isArray: false,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'apikey': securityProvider.getToken()
+                    }
                 }
             })
         };
@@ -94,7 +110,11 @@ userModule.factory('UserFactory', ['$resource',
                     params: {
                         page: 1
                     },
-                    isArray: false
+                    isArray: false,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'apikey': securityProvider.getToken()
+                    }
                 }
             }),
             followers: $resource(host + '/api/v1/users/followers/pages/:page', {}, {
@@ -103,7 +123,11 @@ userModule.factory('UserFactory', ['$resource',
                     params: {
                         page: 1
                     },
-                    isArray: false
+                    isArray: false,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'apikey': securityProvider.getToken()
+                    }
                 }
             }),
             follow: $resource(host + '/api/v1/users/:id/follow', {}, {
@@ -112,7 +136,11 @@ userModule.factory('UserFactory', ['$resource',
                     params: {
                         id: 1
                     },
-                    isArray: false
+                    isArray: false,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'apikey': securityProvider.getToken()
+                    }
                 }
             }),
             unfollow: $resource(host + '/api/v1/users/:id/unfollow', {}, {
@@ -121,7 +149,11 @@ userModule.factory('UserFactory', ['$resource',
                     params: {
                         id: 1
                     },
-                    isArray: false
+                    isArray: false,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'apikey': securityProvider.getToken()
+                    }
                 }
             })
         };
@@ -139,15 +171,11 @@ securityModule.controller('SecurityController', [
 
         self.credential = {
             'username': null,
-            'password': null
+            'password': null,
+            'email': null
         };
 
-        /**
-         * @return {null|string}
-         */
-        self.getToken = function () {
-            return localStorage.getItem('token');
-        };
+
 
         /**
          * @param {string} token
@@ -167,6 +195,17 @@ securityModule.controller('SecurityController', [
             self.credential.password = self.password;
 
             SecurityFactory.login.query(self.credential, function (response) {
+                self.saveToken(response.apiKey);
+                $location.path('/');
+            });
+        };
+
+        self.registration = function () {
+            self.credential.username = self.username;
+            self.credential.password = self.password;
+            self.credential.email = self.email;
+
+            SecurityFactory.registration.save(self.credential, function (response) {
                 self.saveToken(response.apiKey);
                 $location.path('/');
             });
@@ -224,6 +263,21 @@ securityModule.factory('SecurityFactory', ['$resource',
             })
         };
     }]
+);
+
+securityModule.provider('securityProvider',
+    function() {
+        this.$get = function() {
+            return {
+                /**
+                 * @return {null|string}
+                 */
+                getToken: function() {
+                    return localStorage.getItem('token');
+                }
+            }
+        }
+    }
 );
 
 //securityModule.factory('AuthFilter', ['SecurityController',
