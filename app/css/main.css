@@ -1,3 +1,12 @@
+body {
+    background-color: #233140;
+}
+
+#content {
+    background-color: white;
+    min-height: 570px;
+}
+
 .media-body p {
     font-size: 11pt;
 }

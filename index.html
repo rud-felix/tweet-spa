@@ -28,38 +28,35 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#page-top">Twitter <small>v.0.0.2</small></a>
+                <a class="navbar-brand" href="/">Twitter <small>v.0.0.2</small></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-controller="SecurityController as security">
                 <ul class="nav navbar-nav navbar-right">
-                    <!--<li class="hidden">-->
-                        <!--<a href="#page-top"></a>-->
-                    <!--</li>-->
-                    <li class="page-scroll">
+                    <li class="page-scroll" ng-show="security.isAuthed()">
                         <a href="/">Home</a>
                     </li>
-                    <li class="page-scroll">
+                    <li class="page-scroll" ng-show="security.isAuthed()">
                         <a href="#">Followers</a>
                     </li>
-                    <li class="page-scroll">
+                    <li class="page-scroll" ng-show="security.isAuthed()">
                         <a href="/users">Users</a>
                     </li>
-                    <li class="page-scroll">
+                    <li class="page-scroll" ng-show="security.isAuthed()">
                         <a href="/search/message">Search</a>
                     </li>
-                    <li class="page-scroll">
+                    <li class="page-scroll" ng-show="security.isAuthed()">
                         <a href="#">Profile</a>
                     </li>
-                    <li class="page-scroll">
-                        <a href="#">login</a>
+                    <li class="page-scroll" ng-show="!security.isAuthed()">
+                        <a href="/login">Login</a>
                     </li>
-                    <li class="page-scroll">
-                        <a href="#">logout</a>
+                    <li class="page-scroll" ng-show="security.isAuthed()" ng-click="security.logout()">
+                        <a href="/logout">Logout</a>
                     </li>
-                    <li class="page-scroll">
-                        <a href="#">registration</a>
+                    <li class="page-scroll" ng-show="!security.isAuthed()">
+                        <a href="/registration">Registration</a>
                     </li>
                 </ul>
             </div>
@@ -83,13 +80,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
-    <!--<div class="scroll-top page-scroll visible-xs visible-sm">-->
-        <!--<a class="btn btn-primary" href="#page-top">-->
-            <!--<i class="fa fa-chevron-up"></i>-->
-        <!--</a>-->
-    <!--</div>-->
 
     <!-- Portfolio Modals -->
     <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
