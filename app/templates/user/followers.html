@@ -23,7 +23,8 @@
                             </div>
 
                             <div class="col-md-4" class="text-right">
-                                <input class="btn btn-default btn-follow-unfollow" type="submit" value="unwollow">
+                                <input type="submit" value="{{ user.isFollow ? 'unwollow': 'follow'}}"
+                                       class="btn {{ user.isFollow ? 'btn-default':'btn-success'}} btn-follow-unfollow">
                             </div>
                         </div>
                     </li>

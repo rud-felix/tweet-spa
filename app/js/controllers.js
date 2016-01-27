@@ -35,7 +35,7 @@ messageModule.controller('MessageController', ['$scope', '$location', 'MessagesF
         }
         if ($location.path() == '/search/message') {
             $scope.title = 'Search messages';
-            //$scope.messages = MessagesFactory.searchMessages.query();
+            $scope.messages = MessagesFactory.searchMessages.query();
         }
         console.log($scope.messages);
     }
@@ -73,73 +73,25 @@ userModule.controller('profileController', ['$scope', '$location', 'UserFactory'
     function ($scope, $location, UserFactory) {
         var self = this;
 
-        $scope.email = localStorage.getItem('email');
-        $scope.username = localStorage.getItem('username');
+        self.title = 'Profile';
 
-        $scope.title = 'Profile';
-        $scope.users = UserFactory.profile.query();
+        self.context = {
+            "username": localStorage.getItem('username'),
+            "email": localStorage.getItem('email'),
+            "password": self.password
+        };
+
+        self.updateProfile = function() {
+            UserFactory.profile.save(self.context, function(response) {
+                localStorage.setItem('username', response.username);
+                localStorage.setItem('email', response.email);
+                self.context.password = null;
+            }, function() {
+                self.context.password = null;
+            });
+        }
     }
 ]);
-
-// TODO: move factory in to services.js
-messageModule.factory('MessagesFactory', ['$resource', 'securityProvider',
-    function ($resource, securityProvider) {
-        return {
-            userMessages: $resource(host + '/api/v1/messages/users/:userId/pages/:page', {}, {
-                query: {
-                    method: 'GET',
-                    params: {
-                        userId: 1,
-                        page: 1
-                    },
-                    isArray: false,
-                    headers: { // TODO: move headers in some variable
-                        'Content-Type': 'application/json',
-                        'apikey': securityProvider.getToken()
-                    }
-                }
-            }),
-            followersMessages: $resource(host + '/api/v1/messages/followers/pages/:page', {}, {
-                query: {
-                    method: 'GET',
-                    params: {
-                        page: 1
-                    },
-                    isArray: false,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': securityProvider.getToken()
-                    }
-                }
-            }),
-            searchMessages: $resource(host + '/api/v1/messages/search/pages/:page/:text', {}, {
-                query: {
-                    method: 'GET',
-                    params: {
-                        page: 1,
-                        text: 'test'
-                    },
-                    isArray: false,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': securityProvider.getToken()
-                    }
-                }
-            }),
-            addMessages: $resource(host + '/api/v1/messages', {}, {
-                save: {
-                    method: 'POST',
-                    params: {},
-                    isArray: false,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': securityProvider.getToken()
-                    }
-                }
-            })
-        };
-    }]
-);
 
 // Security controller
 securityModule.controller('SecurityController', [
@@ -221,110 +173,6 @@ securityModule.controller('SecurityController', [
         };
     }
 ]);
-
-// TODO: move factory in to services.js
-userModule.factory('UserFactory', ['$resource', 'securityProvider',
-    function ($resource, securityProvider) {
-        return {
-            users: $resource(host + '/api/v1/users/pages/:page', {}, {
-                query: {
-                    method: 'GET',
-                    params: {
-                        page: 1
-                    },
-                    cache: false,
-                    isArray: false,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': securityProvider.getToken()
-                    }
-                }
-            }),
-            followers: $resource(host + '/api/v1/users/followers/pages/:page', {}, {
-                query: {
-                    method: 'GET',
-                    params: {
-                        page: 1
-                    },
-                    cache: false,
-                    isArray: false,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': securityProvider.getToken()
-                    }
-                }
-            }),
-            follow: $resource(host + '/api/v1/users/:userId/follow', {}, {
-                save: {
-                    method: 'POST',
-                    params: {
-                        userId: '@userId'
-                    },
-                    cache: false,
-                    isArray: false,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': securityProvider.getToken()
-                    }
-                }
-            }),
-            unfollow: $resource(host + '/api/v1/users/:userId/unfollow', {}, {
-                save: {
-                    method: 'POST',
-                    params: {
-                        userId: '@userId'
-                    },
-                    cache: false,
-                    isArray: false,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': securityProvider.getToken()
-                    }
-                }
-            }),
-            profile: $resource(host + '/api/v1/users/profile', {}, {
-                query: {
-                    method: 'GET',
-                    isArray: false,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': securityProvider.getToken()
-                    }
-                }
-            }),
-        };
-    }]
-);
-
-// TODO: move factory in to services.js
-securityModule.factory('SecurityFactory', ['$resource',
-    function ($resource) {
-        return {
-            request_login: $resource(host + '/api/v1/login', {}, {
-                query: {
-                    method: 'POST',
-                    params: {},
-                    isArray: false,
-                    cache: false
-                }
-            }),
-            logout: $resource(host + '/api/v1/logout', {}, {
-                query: {
-                    method: 'GET',
-                    params: {},
-                    isArray: false
-                }
-            }),
-            registration: $resource(host + '/api/v1/registration', {}, {
-                save: {
-                    method: 'POST',
-                    params: {},
-                    isArray: false
-                }
-            })
-        };
-    }]
-);
 
 securityModule.provider('securityProvider',
     function () {
