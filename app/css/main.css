@@ -1,0 +1,28 @@
+body {
+    /*background-color: #233140;*/
+}
+
+#content {
+    background-color: white;
+    min-height: 595px;
+}
+
+.media-body p {
+    font-size: 11pt;
+}
+
+.page-title {
+    margin: 20px 0px 20px;
+}
+
+.field-add-mgs {
+    height: 47px;
+}
+
+.btn-follow-unfollow {
+    width: 100px;
+}
+
+.row-user {
+    padding-top: 20px;
+}
