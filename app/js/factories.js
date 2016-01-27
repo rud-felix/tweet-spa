@@ -6,7 +6,7 @@ messageModule.factory('MessagesFactory', ['$resource', 'securityProvider',
                 query: {
                     method: 'GET',
                     params: {
-                        userId: 1,
+                        userId: '@userId',
                         page: 1
                     },
                     isArray: false,
@@ -63,6 +63,20 @@ messageModule.factory('MessagesFactory', ['$resource', 'securityProvider',
 userModule.factory('UserFactory', ['$resource', 'securityProvider',
     function ($resource, securityProvider) {
         return {
+            user: $resource(host + '/api/v1/users/:userId', {}, {
+                query: {
+                    method: 'GET',
+                    params: {
+                        userId: '@userId'
+                    },
+                    cache: false,
+                    isArray: false,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': securityProvider.getToken()
+                    }
+                }
+            }),
             users: $resource(host + '/api/v1/users/pages/:page', {}, {
                 query: {
                     method: 'GET',

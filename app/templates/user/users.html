@@ -1,4 +1,4 @@
-<section id="content" ng-controller="UserController as userCtrl">
+<section id="content" ng-controller="userController as userCtrl">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
@@ -18,16 +18,14 @@
                         <div class="media-body row-user">
                             <div class="col-md-8" class="text-left">
                                 <h4 class="media-heading">
-                                    <a href="#">{{ user.username }}</a>
+                                    <a ng-href="/user/{{userCtrl.userId = user.id}}">{{ user.username }}</a>
                                 </h4>
                             </div>
                             <div class="col-md-4" class="text-right">
-                                <a href="#" ng-click="userCtrl.followUser(user.id)" ng-show="!user.isFollow">follow</a>
-                                <a href="#" ng-click="userCtrl.unfollowUser(user.id)" ng-show="user.isFollow">unfollow</a>
-
-
-                                <input type="submit" value="{{ user.isFollow ? 'unwollow': 'follow'}}"
-                                        class="btn {{ user.isFollow ? 'btn-default':'btn-success'}} btn-follow-unfollow">
+                                <a href="#" ng-click="userCtrl.followUser(user.id)" ng-show="!user.isFollow"
+                                   class="btn {{ user.isFollow ? 'btn-default':'btn-success'}} btn-follow-unfollow">follow</a>
+                                <a href="#" ng-click="userCtrl.unfollowUser(user.id)" ng-show="user.isFollow"
+                                   class="btn {{ user.isFollow ? 'btn-default':'btn-success'}} btn-follow-unfollow">unfollow</a>
                             </div>
                         </div>
                     </li>

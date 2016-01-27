@@ -10,12 +10,12 @@ messageModule.config(['$routeProvider', '$locationProvider',
         $routeProvide
             .when('/', {
                 templateUrl: '/app/templates/home.html',
-                controller: 'MessageController',
+                controller: 'messageController',
                 auth: true
             })
             .when('/search/message', {
                 templateUrl: '/app/templates/message/search.html',
-                controller: 'MessageController',
+                controller: 'messageController',
                 auth: true
             })
             //.otherwise({
@@ -35,17 +35,17 @@ userModule.config(['$routeProvider', '$locationProvider',
         $routeProvide
             .when('/users', {
                 templateUrl: '/app/templates/user/users.html',
-                controller: 'UserController',
+                controller: 'userController',
                 auth: true
             })
-            .when('/users/:id', {
-                templateUrl: '/app/templates/user/users.html',
-                controller: 'UserController',
+            .when('/user/:id', {
+                templateUrl: '/app/templates/user/user.html',
+                controller: 'someUserController',
                 auth: true
             })
             .when('/users/followers', {
                 templateUrl: '/app/templates/user/followers.html',
-                controller: 'UserController',
+                controller: 'userController',
                 auth: true
             })
             .when('/profile', {
@@ -67,14 +67,14 @@ securityModule.config(['$routeProvider', '$locationProvider',
         $routeProvide
             .when('/login', {
                 templateUrl: '/app/templates/security/login.html',
-                controller: 'SecurityController'
+                controller: 'securityController'
             })
             .when('/registration', {
                 templateUrl: '/app/templates/security/registration.html',
-                controller: 'SecurityController'
+                controller: 'securityController'
             })
             .when('/logout', {
-                controller: 'SecurityController',
+                controller: 'securityController',
                 auth: true
             })
         ;

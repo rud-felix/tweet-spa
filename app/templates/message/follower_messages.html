@@ -7,19 +7,6 @@
                     <hr class="star-light">
                 </div>
             </div>
-            <!--<div class="row">-->
-                <!--<div class="col-lg-4 col-lg-offset-2">-->
-                    <!--<p></p>-->
-                <!--</div>-->
-                <!--<div class="col-lg-4">-->
-                    <!--<p></p>-->
-                <!--</div>-->
-                <!--<div class="col-lg-8 col-lg-offset-2 text-center">-->
-                    <!--<a href="#" class="btn btn-lg btn-outline">-->
-                        <!--<i class="fa fa-download"></i> button-->
-                    <!--</a>-->
-                <!--</div>-->
-            <!--</div>-->
             <div class="row">
                 <div class="col-lg-3"></div>
                 <div class="col-lg-6">
@@ -33,7 +20,7 @@
                             <div class="media-body">
                                 <h4 class="media-heading">
                                     <a href="#"><small>{{ message.user }}</small></a>
-                                    - <small>{{ message.createdAt | date: 'H:i' }}</small>
+                                    Time: <small>{{ message.createdAt | date: 'H:i' }}</small>
                                 </h4>
                                 <p>{{ message.text }}<p>
                             </div>

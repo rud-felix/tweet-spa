@@ -1,7 +1,7 @@
 'use strict';
 
 // Message controller
-messageModule.controller('MessageController', ['$scope', '$location', 'MessagesFactory',
+messageModule.controller('messageController', ['$scope', '$location', 'MessagesFactory',
     function ($scope, $location, MessagesFactory) {
         var self = this;
 
@@ -37,14 +37,16 @@ messageModule.controller('MessageController', ['$scope', '$location', 'MessagesF
             $scope.title = 'Search messages';
             $scope.messages = MessagesFactory.searchMessages.query();
         }
-        console.log($scope.messages);
     }
 ]);
 
 // User controller
-userModule.controller('UserController', ['$scope', '$location', 'UserFactory',
+userModule.controller('userController', ['$scope', '$location', 'UserFactory',
     function ($scope, $location, UserFactory) {
         var self = this;
+        var userId = $scope.userId;
+
+        console.log(userId);
 
         self.followUser = function(id) {
             UserFactory.follow.save({ userId: id });
@@ -68,6 +70,22 @@ userModule.controller('UserController', ['$scope', '$location', 'UserFactory',
         }
     }
 ]);
+
+userModule.controller('someUserController', ['$scope', '$location', 'UserFactory', 'MessagesFactory',
+    function ($scope, $location, UserFactory, MessagesFactory) {
+        var userId = $scope.userId;
+
+        console.log(userId);
+
+        if (userId) {
+            $scope.user = UserFactory.user.query({userId: userId});
+            $scope.messages = MessagesFactory.userMessages.query({userId: userId});
+            return true;
+        }
+        return false;
+    }
+]);
+
 
 userModule.controller('profileController', ['$scope', '$location', 'UserFactory',
     function ($scope, $location, UserFactory) {
@@ -94,7 +112,7 @@ userModule.controller('profileController', ['$scope', '$location', 'UserFactory'
 ]);
 
 // Security controller
-securityModule.controller('SecurityController', [
+securityModule.controller('securityController', [
     '$scope',
     '$location',
     '$routeParams',

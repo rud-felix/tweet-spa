@@ -1,27 +1,17 @@
-<section id="content">
+<section id="content" ng-controller="userController as userCtrl">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
-                <h2 class="page-title">{{title}}</h2>
+                <h2 class="page-title">{{user.username}} <small>messages</small></h2>
+                <div class="text-right">
+                    <a href="#" ng-click="userCtrl.followUser(user.id)" ng-show="!user.isFollow" class="btn {{ user.isFollow ? 'btn-default':'btn-success'}} btn-follow-unfollow">follow</a>
+                    <a href="#" ng-click="userCtrl.unfollowUser(user.id)" ng-show="user.isFollow" class="btn {{ user.isFollow ? 'btn-default':'btn-success'}} btn-follow-unfollow">unfollow</a>
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-3"></div>
             <div class="col-lg-6">
-
-                <div class="control-group" ng-controller="messageController as msg">
-                    <form ng-submit="msg.add()">
-                        <div class="col-md-10">
-                            <input ng-model="msg.text" type="text" class="form-control field-add-mgs" placeholder="What's news?" id="text">
-                        </div>
-                        <div class="col-md-2">
-                            <div class="text-center">
-                                <input class="btn btn-success btn-lg" type="submit" value="send">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
                 <ul class="media-list">
                     <li class="media" ng-repeat="message in messages.data">
                         <div class="media-left">
