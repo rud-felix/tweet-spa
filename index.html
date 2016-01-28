@@ -11,8 +11,8 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="app/css/theme.css">
-    <link rel="stylesheet" href="app/css/main.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/main.css">
     <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 </head>
@@ -32,30 +32,30 @@
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-controller="securityController as security">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-controller="CommonController as CommonCtrl">
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="page-scroll" ng-show="security.isAuthed()">
+                    <li class="page-scroll" ng-show="CommonCtrl.isAuthed()">
                         <a href="/">Home</a>
                     </li>
-                    <li class="page-scroll" ng-show="security.isAuthed()">
+                    <li class="page-scroll" ng-show="CommonCtrl.isAuthed()">
                         <a href="/users/followers">Followers</a>
                     </li>
-                    <li class="page-scroll" ng-show="security.isAuthed()">
+                    <li class="page-scroll" ng-show="CommonCtrl.isAuthed()">
                         <a href="/users">Users</a>
                     </li>
-                    <li class="page-scroll" ng-show="security.isAuthed()">
+                    <li class="page-scroll" ng-show="CommonCtrl.isAuthed()">
                         <a href="/search/message">Search</a>
                     </li>
-                    <li class="page-scroll" ng-show="security.isAuthed()">
+                    <li class="page-scroll" ng-show="CommonCtrl.isAuthed()">
                         <a href="/profile">Profile</a>
                     </li>
-                    <li class="page-scroll" ng-show="!security.isAuthed()">
+                    <li class="page-scroll" ng-show="!CommonCtrl.isAuthed()">
                         <a href="/login">Login</a>
                     </li>
-                    <li class="page-scroll" ng-show="security.isAuthed()" ng-click="security.logout()">
+                    <li class="page-scroll" ng-show="CommonCtrl.isAuthed()" ng-click="CommonCtrl.logout()">
                         <a href="/logout">Logout</a>
                     </li>
-                    <li class="page-scroll" ng-show="!security.isAuthed()">
+                    <li class="page-scroll" ng-show="!CommonCtrl.isAuthed()">
                         <a href="/registration">Registration</a>
                     </li>
                 </ul>
@@ -154,21 +154,29 @@
 
     <!-- Angular.js core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="bower_components/angular/angular.js"></script>
-    <!--Angular.js Route-->
-    <script src="bower_components/angular-route/angular-route.js"></script>
-    <!--Angular.js Resource-->
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-
-    <script src="app/js/modules/message.js"></script>
-    <script src="app/js/modules/security.js"></script>
-    <script src="app/js/modules/user.js"></script>
-    <script src="app/js/services.js"></script>
-    <script src="app/js/factories.js"></script>
-    <script src="app/js/controllers.js"></script>
-    <script src="app/js/routes.js"></script>
-    <script src="app/js/app.js"></script>
+    <!-- angular -->
+<script src="app/app.modules.js" type="text/javascript"></script>
+<script src="app/security/controller/СommonController.js" type="text/javascript"></script>
+<script src="vendor/angular-resource/angular-resource.js" type="text/javascript"></script>
+<script src="vendor/angular-route/angular-route.js" type="text/javascript"></script>
+<script src="vendor/angular/angular.js" type="text/javascript"></script>
+<script src="app/user/factory/UserFactory.js" type="text/javascript"></script>
+<script src="app/user/controller/users.js" type="text/javascript"></script>
+<script src="app/user/controller/unfollow.js" type="text/javascript"></script>
+<script src="app/user/controller/profile.js" type="text/javascript"></script>
+<script src="app/user/controller/followers.js" type="text/javascript"></script>
+<script src="app/user/controller/follow.js" type="text/javascript"></script>
+<script src="app/user/controller/SomeUserController.js" type="text/javascript"></script>
+<script src="app/security/provider/securityProvider.js" type="text/javascript"></script>
+<script src="app/security/factory/SecurityFactory.js" type="text/javascript"></script>
+<script src="app/security/controller/RegistrationController.js" type="text/javascript"></script>
+<script src="app/security/controller/LogoutController.js" type="text/javascript"></script>
+<script src="app/security/controller/LoginController.js" type="text/javascript"></script>
+<script src="app/message/factory/MessageFactory.js" type="text/javascript"></script>
+<script src="app/message/controller/messageController.js" type="text/javascript"></script>
+<script src="app/app.routes.js" type="text/javascript"></script>
+<script src="app/app.js" type="text/javascript"></script>
+<!-- endangular -->
 
     <!--<script src="bower_components/jquery/dist/jquery.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>

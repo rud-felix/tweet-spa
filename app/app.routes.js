@@ -9,13 +9,13 @@ messageModule.config(['$routeProvider', '$locationProvider',
 
         $routeProvide
             .when('/', {
-                templateUrl: '/app/templates/home.html',
-                controller: 'messageController',
+                templateUrl: '/app/home/templates/home.html',
+                controller: 'MessageController',
                 auth: true
             })
             .when('/search/message', {
-                templateUrl: '/app/templates/message/search.html',
-                controller: 'messageController',
+                templateUrl: '/app/message/templates/search.html',
+                controller: 'MessageController',
                 auth: true
             })
             //.otherwise({
@@ -34,23 +34,23 @@ userModule.config(['$routeProvider', '$locationProvider',
 
         $routeProvide
             .when('/users', {
-                templateUrl: '/app/templates/user/users.html',
-                controller: 'userController',
+                templateUrl: '/app/user/templates/users.html',
+                controller: 'UserController',
                 auth: true
             })
             .when('/user/:id', {
-                templateUrl: '/app/templates/user/user.html',
-                controller: 'someUserController',
+                templateUrl: '/app/user/templates/user.html',
+                controller: 'SomeUserController',
                 auth: true
             })
             .when('/users/followers', {
-                templateUrl: '/app/templates/user/followers.html',
-                controller: 'userController',
+                templateUrl: '/app/user/templates/followers.html',
+                controller: 'UserController',
                 auth: true
             })
             .when('/profile', {
-                templateUrl: '/app/templates/user/profile.html',
-                controller: 'profileController',
+                templateUrl: '/app/user/templates/profile.html',
+                controller: 'ProfileController',
                 auth: true
             })
         ;
@@ -66,15 +66,15 @@ securityModule.config(['$routeProvider', '$locationProvider',
 
         $routeProvide
             .when('/login', {
-                templateUrl: '/app/templates/security/login.html',
-                controller: 'securityController'
+                templateUrl: '/app/security/templates/login.html',
+                controller: 'LoginController'
             })
             .when('/registration', {
-                templateUrl: '/app/templates/security/registration.html',
-                controller: 'securityController'
+                templateUrl: '/app/security/templates/registration.html',
+                controller: 'RegistrationController'
             })
             .when('/logout', {
-                controller: 'securityController',
+                controller: 'LogoutController',
                 auth: true
             })
         ;

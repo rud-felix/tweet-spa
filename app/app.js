@@ -3,9 +3,6 @@
 // API host
 var host = 'http://twitter.local';
 
-// Main module
-var appModule = angular.module("appModule", ['messageModule', 'userModule', 'securityModule']);
-
 // if route not found then redirect to /login
 appModule.config(['$routeProvider', '$locationProvider',
     function ($routeProvide, $locationProvider) {
